@@ -4,7 +4,6 @@ Highstock Current Price Indicator
 Using this plugin will display current price indicator in Highstock.
 
 Configuration:
-
 <pre>
 yAxis: {
   currentPriceIndicator: {
