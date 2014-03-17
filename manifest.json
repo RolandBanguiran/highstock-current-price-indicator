@@ -19,7 +19,8 @@
     "description": "Using this plugin will display current price indicator in Highstock.",
     "keywords": [
      "price",
-     "indicator"
+     "indicator",
+     "yAxis"
     ],
     "dependencies": {
         "Highcharts": ">=3.0.0"
