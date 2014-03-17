@@ -12,8 +12,7 @@
     "licenses": [
         {
             "type": "GPL v2",
-            "url": "https://github.com/RolandBanguiran/highstock-current-price-indicator
-/blob/master/LICENSE"
+            "url": "https://github.com/RolandBanguiran/highstock-current-price-indicator/blob/master/LICENSE"
         }
     ],
     "description": "Using this plugin will display current price indicator in Highstock.",
