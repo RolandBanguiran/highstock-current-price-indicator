@@ -1,3 +1,14 @@
+/**
+* Highstock plugin for displaying current price indicator.
+*
+* Author: Roland Banguiran
+* Email: banguiran@gmail.com
+*
+*/
+
+// JSLint options:
+/*global Highcharts, document */
+
 (function(H) {
     'use strict';
     var merge = H.merge;
