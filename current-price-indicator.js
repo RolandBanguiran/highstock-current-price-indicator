@@ -85,8 +85,6 @@
 
         lineFrom = priceYAxis.opposite ? marginLeft : chartWidth - marginRight;
 
-        console.log([lineFrom, x]);
-
         // offset
         x += options.x;
         y += options.y;
