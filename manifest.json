@@ -1,0 +1,27 @@
+{
+    "name": "Current Price Indicator",
+    "version": "1.0.0",
+    "title": "Highstocks Current Price Indicator",
+    "demo": [
+        "http://jsfiddle.net/RolandBanguiran/nf7ne/"
+    ],
+    "author": {
+        "name": "Roland Banguiran",
+        "url": "http://sg.linkedin.com/in/rolandbanguiran"
+    },
+    "licenses": [
+        {
+            "type": "GPL v2",
+            "url": "https://github.com/RolandBanguiran/highstock-current-price-indicator
+/blob/master/LICENSE"
+        }
+    ],
+    "description": "Using this plugin will display current price indicator in Highstock.",
+    "keywords": [
+     "price",
+     "indicator"
+    ],
+    "dependencies": {
+        "Highcharts": ">=3.0.0"
+    }
+}
