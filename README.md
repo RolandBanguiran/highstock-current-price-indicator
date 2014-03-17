@@ -9,14 +9,14 @@ yAxis: {
   currentPriceIndicator: {
     backgroundColor: '#000000',
     borderColor: '#000000',
-    lineColor: '#000000',
     enabled: true,
+    lineColor: '#000000',
     style: {
       color: '#ffffff',
       fontSize: '11px'
     },
-    x: 0,
-    y: 0,
+    x: 0, //offset
+    y: 0, //offset
     zIndex: 7
   }
 }
