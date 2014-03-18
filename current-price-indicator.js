@@ -130,7 +130,7 @@
                     .attr({
                     stroke: options.lineColor,
                     'stroke-dasharray': dashStyleToArray(options.lineDashStyle, 1),
-                    'stroke-width': 1
+                    'stroke-width': 1,
                     opacity: options.lineOpacity,
                     zIndex: 1,
                 })
