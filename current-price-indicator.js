@@ -45,6 +45,8 @@
                 backgroundColor: '#000000',
                 borderColor: '#000000',
                 lineColor: '#000000',
+                lineDashStyle: 'Solid',
+                lineOpacity: 0.8,
                 enabled: true,
                 style: {
                     color: '#ffffff',
@@ -127,12 +129,12 @@
                 line = renderer.path(['M', lineFrom, y, 'L', x, y])
                     .attr({
                     stroke: options.lineColor,
+                    'stroke-dasharray': dashStyleToArray(options.lineDashStyle, 1),
+                    'stroke-width': 1
+                    opacity: options.lineOpacity,
                     zIndex: 1,
-                        'stroke-width': 1,
-                    //'stroke-dasharray': dashStyleToArray(options.dashStyle,1),
-                    opacity: 1
                 })
-                    .add(group);
+                .add(group);
 
                 // adjust
                 label.animate({
@@ -174,5 +176,42 @@
                 line: line
             }
         }
-    }
+    };
+    
+    /**
+     * Convert dash style name to array to be used a the value
+     * for SVG element's "stroke-dasharray" attribute
+     * @param {String} dashStyle	Possible values: 'Solid', 'Shortdot', 'Shortdash', etc
+     * @param {Integer} width	SVG element's "stroke-width"
+     * @param {Array} value
+     */
+    function dashStyleToArray(dashStyle, width) {
+        var value;
+
+        dashStyle = dashStyle.toLowerCase();
+        width = (typeof width !== 'undefined' && width !== 0) ? width : 1;
+
+        if (dashStyle === 'solid') {
+            value = 'none';
+        } else if (dashStyle) {
+            value = dashStyle
+                .replace('shortdashdotdot', '3,1,1,1,1,1,')
+                .replace('shortdashdot', '3,1,1,1')
+                .replace('shortdot', '1,1,')
+                .replace('shortdash', '3,1,')
+                .replace('longdash', '8,3,')
+                .replace(/dot/g, '1,3,')
+                .replace('dash', '4,3,')
+                .replace(/,$/, '')
+                .split(','); // ending comma
+
+            i = value.length;
+            while (i--) {
+                value[i] = parseInt(value[i]) * width;
+            }
+            value = value.join(',');
+        }
+
+        return value;
+    };
 }(Highcharts));
