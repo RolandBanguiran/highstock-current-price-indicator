@@ -23,3 +23,5 @@ yAxis: {
   }
 }
 </pre>
+
+Demo: http://www.highcharts.com/plugin-registry/single/28/Current%20Price%20Indicator
