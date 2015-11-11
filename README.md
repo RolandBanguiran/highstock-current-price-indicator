@@ -19,7 +19,8 @@ yAxis: {
     },
     x: 0, //offset
     y: 0, //offset
-    zIndex: 7
+    zIndex: 7,
+	labelFormatter: null		//advanced price to text formatter
   }
 }
 </pre>
