@@ -29,12 +29,17 @@
         renderCurrentPriceIndicator(this);
     });
 
+	function getCurrentPrice(chartSeries) {
+		var priceSeries = chartSeries[0];
+		var currentPrice = priceSeries.data[priceSeries.data.length-1].y;
+		
+		return currentPrice;
+	}
+	
     function renderCurrentPriceIndicator(chart) {
 
         var priceYAxis = chart.yAxis[0],
-            priceSeries = chart.series[0],
-            priceData = priceSeries.yData,
-            currentPrice = priceData[priceData.length - 1][3],
+            currentPrice = getCurrentPrice(chart.series),
 
             extremes = priceYAxis.getExtremes(),
             min = extremes.min,
@@ -54,7 +59,8 @@
                 },
                 x: 0,
                 y: 0,
-                zIndex: 7
+                zIndex: 7,
+				labelFormatter: null
             },
 
             chartWidth = chart.chartWidth,
@@ -80,10 +86,12 @@
             lineFrom;
 
         options = merge(true, defaultOptions, options);
-
+		
+		var currentPriceTxt = options.labelFormatter ? options.labelFormatter(currentPrice) : (''+currentPrice);
+		
         width = priceYAxis.opposite ? (marginRight ? marginRight : 40) : (marginLeft ? marginLeft : 40);
         x = priceYAxis.opposite ? chartWidth - width : marginLeft;
-        y = priceYAxis.toPixels(currentPrice);
+        y = priceYAxis.toPixels(currentPriceTxt);
 
         lineFrom = priceYAxis.opposite ? marginLeft : chartWidth - marginRight;
 
@@ -103,7 +111,7 @@
                     .add();
 
                 // label
-                label = renderer.text(currentPrice, x, y)
+                label = renderer.text(currentPriceTxt, x, y)
                     .attr({
                     zIndex: 2
                 })
@@ -142,7 +150,7 @@
                 }, 0);
             } else {
                 currentPriceIndicator.label.animate({
-                    text: currentPrice,
+                    text: currentPriceTxt,
                     y: y
                 }, 0);
 
