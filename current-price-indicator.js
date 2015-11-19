@@ -29,17 +29,33 @@
         renderCurrentPriceIndicator(this);
     });
 
-	function getCurrentPrice(chartSeries) {
+	function getCurrentPrice(chart) {
+	
+		var chartSeries = chart.series;
 		var priceSeries = chartSeries[0];
-		var currentPrice = priceSeries.data[priceSeries.data.length-1].y;
+		var priceData = priceSeries.yData;
 		
+		var currentPrice = 0.0;
+		if(priceData.length>0) {
+			switch(priceSeries.type){
+				case 'line':
+				case 'spline':
+					currentPrice = priceData[priceData.length - 1];
+					break;
+				default:
+					//FIXME: add more types processing - default for OHLC
+					currentPrice = priceData[priceData.length - 1][3];
+					break;
+			}
+		}
+		 
 		return currentPrice;
 	}
 	
     function renderCurrentPriceIndicator(chart) {
 
         var priceYAxis = chart.yAxis[0],
-            currentPrice = getCurrentPrice(chart.series),
+            currentPrice = getCurrentPrice(chart),
 
             extremes = priceYAxis.getExtremes(),
             min = extremes.min,
