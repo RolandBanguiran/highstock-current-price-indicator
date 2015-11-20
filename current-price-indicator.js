@@ -1,10 +1,10 @@
 /**
-* Highstock plugin for displaying current price indicator.
-*
-* Author: Roland Banguiran
-* Email: banguiran@gmail.com
-*
-*/
+ * Highstock plugin for displaying current price indicator.
+ *
+ * Author: Roland Banguiran
+ * Email: banguiran@gmail.com
+ *
+ */
 
 // JSLint options:
 /*global Highcharts, document */
@@ -29,29 +29,29 @@
         renderCurrentPriceIndicator(this);
     });
 
-	function getCurrentPrice(chart) {
-	
-		var chartSeries = chart.series;
-		var priceSeries = chartSeries[0];
-		var priceData = priceSeries.yData;
-		
-		var currentPrice = 0.0;
-		if(priceData.length>0) {
-			switch(priceSeries.type){
-				case 'line':
-				case 'spline':
-					currentPrice = priceData[priceData.length - 1];
-					break;
-				default:
-					//FIXME: add more types processing - default for OHLC
-					currentPrice = priceData[priceData.length - 1][3];
-					break;
-			}
-		}
-		 
-		return currentPrice;
-	}
-	
+    function getCurrentPrice(chart) {
+
+        var chartSeries = chart.series;
+        var priceSeries = chartSeries[0];
+        var priceData = priceSeries.yData;
+
+        var currentPrice = 0.0;
+        if (priceData.length > 0) {
+            switch (priceSeries.type) {
+                case 'line':
+                case 'spline':
+                    currentPrice = priceData[priceData.length - 1];
+                    break;
+                default:
+                    //FIXME: add more types processing - default for OHLC
+                    currentPrice = priceData[priceData.length - 1][3];
+                    break;
+            }
+        }
+
+        return currentPrice;
+    }
+
     function renderCurrentPriceIndicator(chart) {
 
         var priceYAxis = chart.yAxis[0],
@@ -76,7 +76,7 @@
                 x: 0,
                 y: 0,
                 zIndex: 7,
-				labelFormatter: null
+                labelFormatter: null
             },
 
             chartWidth = chart.chartWidth,
@@ -94,26 +94,27 @@
             box = currentPriceIndicator.box,
             line = currentPriceIndicator.line,
 
-            width,
-            height,
-            x,
             y,
 
             lineFrom;
 
         options = merge(true, defaultOptions, options);
-		
-		var currentPriceTxt = options.labelFormatter ? options.labelFormatter(currentPrice) : (''+currentPrice);
-		
-        width = priceYAxis.opposite ? (marginRight ? marginRight : 40) : (marginLeft ? marginLeft : 40);
-        x = priceYAxis.opposite ? chartWidth - width : marginLeft;
-        y = priceYAxis.toPixels(currentPriceTxt);
+
+        var currentPriceTxt = options.labelFormatter ? options.labelFormatter(currentPrice) : ('' + currentPrice);
+
+        y = priceYAxis.toPixels(currentPrice);
+        y += options.y;
 
         lineFrom = priceYAxis.opposite ? marginLeft : chartWidth - marginRight;
 
+        /*
+        width = priceYAxis.opposite ? (marginRight ? marginRight : 40) : (marginLeft ? marginLeft : 40);
+        debugger;
+        x = priceYAxis.opposite ? chartWidth - width : marginLeft;
         // offset
         x += options.x;
-        y += options.y;
+        
+        */
 
         if (options.enabled) {
 
@@ -122,58 +123,74 @@
                 // group
                 group = renderer.g()
                     .attr({
-                    zIndex: options.zIndex
-                })
+                        zIndex: options.zIndex
+                    })
                     .add();
 
                 // label
-                label = renderer.text(currentPriceTxt, x, y)
-                    .attr({
-                    zIndex: 2
-                })
+                label = renderer.text(currentPriceTxt, 0, y)
                     .css({
-                    color: options.style.color,
-                    fontSize: options.style.fontSize
-                })
-                    .add(group);
+                        color: options.style.color,
+                        fontSize: options.style.fontSize
+                    }).add(group);
 
-                height = label.getBBox().height;
+                var labelBBox = label.getBBox();
+                var width = labelBBox.width;
+                var height = labelBBox.height;
+                var x = priceYAxis.opposite ? chartWidth - width : marginLeft;
+                x += options.x;
+
+                //fix label pos
+                label.attr({
+                    x: x,
+                    zIndex: 2
+                });
 
                 // box
                 box = renderer.rect(x, y - (height / 2), width, height)
                     .attr({
-                    fill: options.backgroundColor,
-                    stroke: options.borderColor,
-                    zIndex: 1,
+                        fill: options.backgroundColor,
+                        stroke: options.borderColor,
+                        zIndex: 1,
                         'stroke-width': 1
-                })
+                    })
                     .add(group);
 
                 // box
                 line = renderer.path(['M', lineFrom, y, 'L', x, y])
                     .attr({
-                    stroke: options.lineColor,
-                    'stroke-dasharray': dashStyleToArray(options.lineDashStyle, 1),
-                    'stroke-width': 1,
-                    opacity: options.lineOpacity,
-                    zIndex: 1,
-                })
-                .add(group);
+                        stroke: options.lineColor,
+                        'stroke-dasharray': dashStyleToArray(options.lineDashStyle, 1),
+                        'stroke-width': 1,
+                        opacity: options.lineOpacity,
+                        zIndex: 1,
+                    })
+                    .add(group);
 
                 // adjust
                 label.animate({
                     y: y + (height / 4)
                 }, 0);
             } else {
+                currentPriceIndicator.label.attr({
+                    text: currentPriceTxt
+                });
+
+                var labelBBox = currentPriceIndicator.label.getBBox();
+                var width = labelBBox.width;
+                var height = labelBBox.height;
+                var x = priceYAxis.opposite ? chartWidth - width : marginLeft;
+                x += options.x;
+
                 currentPriceIndicator.label.animate({
                     text: currentPriceTxt,
-                    y: y
+                    y: y,
+                    x: x
                 }, 0);
 
-                height = currentPriceIndicator.label.getBBox().height;
-
                 currentPriceIndicator.box.animate({
-                    y: y - (height / 2)
+                    y: y - (height / 2),
+                    x: x
                 }, 0);
 
                 currentPriceIndicator.line.animate({
@@ -201,12 +218,12 @@
             }
         }
     };
-    
+
     /**
      * Convert dash style name to array to be used a the value
      * for SVG element's "stroke-dasharray" attribute
-     * @param {String} dashStyle	Possible values: 'Solid', 'Shortdot', 'Shortdash', etc
-     * @param {Integer} width	SVG element's "stroke-width"
+     * @param {String} dashStyle    Possible values: 'Solid', 'Shortdot', 'Shortdash', etc
+     * @param {Integer} width   SVG element's "stroke-width"
      * @param {Array} value
      */
     function dashStyleToArray(dashStyle, width) {
