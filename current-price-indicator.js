@@ -138,7 +138,7 @@
                 var labelBBox = label.getBBox();
                 var width = labelBBox.width;
                 var height = labelBBox.height;
-                var x = priceYAxis.opposite ? chartWidth - width : marginLeft;
+                var x = priceYAxis.opposite ? chartWidth - priceYAxis.right : marginLeft;
                 x += options.x;
 
                 //fix label pos
