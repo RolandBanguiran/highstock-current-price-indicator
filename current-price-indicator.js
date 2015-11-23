@@ -40,6 +40,7 @@
             switch (priceSeries.type) {
                 case 'line':
                 case 'spline':
+				case 'area':
                     currentPrice = priceData[priceData.length - 1];
                     break;
                 default:
