@@ -4,16 +4,23 @@
 * Author: Roland Banguiran
 * Email: banguiran@gmail.com
 *
+* Edited By: Gal Ziv on 3.3.2016
+* Functionallity added: 
+* options.pullLeft(number) : takes the box x position left by specified value. to pull right use negative values.
+* options.triangle(object):  specify null to disable. else specify an object with 'width'(number) property
+* options.extractLastPriceFunction(function): the function to extract the last price from our yAxis data.
+* options.priceIncreaseColor(color): the color when the price has increased from its last value. to disable, just specify the background color
+* options.priceDecreaseColor(color): the color when the price has decreased from its last value. to disable, just specify the background color
 */
 
 // JSLint options:
 /*global Highcharts, document */
 
-(function(H) {
+(function (H) {
     'use strict';
     var merge = H.merge;
 
-    H.wrap(H.Chart.prototype, 'init', function(proceed) {
+    H.wrap(H.Chart.prototype, 'init', function (proceed) {
 
         // Run the original proceed method
         proceed.apply(this, Array.prototype.slice.call(arguments, 1));
@@ -21,7 +28,7 @@
         renderCurrentPriceIndicator(this);
     });
 
-    H.wrap(H.Chart.prototype, 'redraw', function(proceed) {
+    H.wrap(H.Chart.prototype, 'redraw', function (proceed) {
 
         // Run the original proceed method
         proceed.apply(this, Array.prototype.slice.call(arguments, 1));
@@ -31,22 +38,33 @@
 
     function renderCurrentPriceIndicator(chart) {
 
+        var options = chart.options.yAxis[0].currentPriceIndicator;
+
+        // if not configured then do nothing.
+        if (!options) {
+            return;
+        }
+
         var priceYAxis = chart.yAxis[0],
             priceSeries = chart.series[0],
             priceData = priceSeries.yData,
-            currentPrice = priceData[priceData.length - 1][3],
+            extractLastPriceFunction = options.extractLastPriceFunction,
+            currentPrice = extractLastPriceFunction ? extractLastPriceFunction(priceData) : priceData[priceData.length - 1][3],
 
             extremes = priceYAxis.getExtremes(),
             min = extremes.min,
             max = extremes.max,
 
-            options = chart.options.yAxis[0].currentPriceIndicator,
             defaultOptions = {
                 backgroundColor: '#000000',
+                priceIncreaseColor: 'green',
+                priceDecreaseColor: 'red',
                 borderColor: '#000000',
                 lineColor: '#000000',
                 lineDashStyle: 'Solid',
+                pullLeft: 0,
                 lineOpacity: 0.8,
+                triangle: { width: 10 },
                 enabled: true,
                 style: {
                     color: '#ffffff',
@@ -58,7 +76,6 @@
             },
 
             chartWidth = chart.chartWidth,
-            chartHeight = chart.chartHeight,
             marginRight = chart.optionsMarginRight || 0,
             marginLeft = chart.optionsMarginLeft || 0,
 
@@ -71,6 +88,7 @@
             label = currentPriceIndicator.label,
             box = currentPriceIndicator.box,
             line = currentPriceIndicator.line,
+            triangle = currentPriceIndicator.triangle,
 
             width,
             height,
@@ -81,6 +99,8 @@
 
         options = merge(true, defaultOptions, options);
 
+
+
         width = priceYAxis.opposite ? (marginRight ? marginRight : 40) : (marginLeft ? marginLeft : 40);
         x = priceYAxis.opposite ? chartWidth - width : marginLeft;
         y = priceYAxis.toPixels(currentPrice);
@@ -88,7 +108,7 @@
         lineFrom = priceYAxis.opposite ? marginLeft : chartWidth - marginRight;
 
         // offset
-        x += options.x;
+        x += options.x - options.pullLeft;
         y += options.y;
 
         if (options.enabled) {
@@ -98,42 +118,42 @@
                 // group
                 group = renderer.g()
                     .attr({
-                    zIndex: options.zIndex
-                })
+                        zIndex: options.zIndex
+                    })
                     .add();
 
                 // label
                 label = renderer.text(currentPrice, x, y)
                     .attr({
-                    zIndex: 2
-                })
+                        zIndex: 2
+                    })
                     .css({
-                    color: options.style.color,
-                    fontSize: options.style.fontSize
-                })
+                        color: options.style.color,
+                        fontSize: options.style.fontSize
+                    })
                     .add(group);
 
                 height = label.getBBox().height;
 
                 // box
-                box = renderer.rect(x, y - (height / 2), width, height)
+                box = renderer.rect(x, y - (height / 2), width + options.boxIncreaseWidthBy, height)
                     .attr({
-                    fill: options.backgroundColor,
-                    stroke: options.borderColor,
-                    zIndex: 1,
+                        fill: options.backgroundColor,
+                        stroke: options.borderColor,
+                        zIndex: 1,
                         'stroke-width': 1
-                })
+                    })
                     .add(group);
 
-                // box
+                // horizontal line
                 line = renderer.path(['M', lineFrom, y, 'L', x, y])
                     .attr({
-                    stroke: options.lineColor,
-                    'stroke-dasharray': dashStyleToArray(options.lineDashStyle, 1),
-                    'stroke-width': 1,
-                    opacity: options.lineOpacity,
-                    zIndex: 1,
-                })
+                        stroke: options.lineColor,
+                        'stroke-dasharray': dashStyleToArray(options.lineDashStyle, 1),
+                        'stroke-width': 1,
+                        opacity: options.lineOpacity,
+                        zIndex: 1,
+                    })
                 .add(group);
 
                 // adjust
@@ -160,7 +180,24 @@
                 currentPriceIndicator.label.animate({
                     y: y + (height / 4)
                 }, 0);
+
+                // set price direction color
             }
+
+            if (options.triangle) {
+
+                if (currentPriceIndicator.triangle) {
+                    currentPriceIndicator.triangle.destroy();
+                }
+
+                triangle = renderer.path(['M', x, y - (height / 2), 'L', x, y + (height / 2), 'L', x - options.triangle.width, y, 'Z'])
+                    .attr({
+                        fill: options.backgroundColor,
+                        zIndex: 1,
+                    })
+                .add(group);
+            }
+
 
             if (currentPrice > min && currentPrice < max) {
                 group.show();
@@ -173,11 +210,21 @@
                 group: group,
                 label: label,
                 box: box,
-                line: line
+                line: line,
+                triangle: triangle
             }
         }
+
+        if (priceYAxis.lastPrice) {
+            var color = currentPrice > priceYAxis.lastPrice ? options.priceIncreaseColor : options.priceDecreaseColor;
+            priceYAxis.currentPriceIndicator.box.attr({ fill: color, stroke: color });
+            priceYAxis.currentPriceIndicator.line.attr({ stroke: color });
+            priceYAxis.currentPriceIndicator.triangle.attr({ fill: color });
+        }
+
+        priceYAxis.lastPrice = currentPrice;
     };
-    
+
     /**
      * Convert dash style name to array to be used a the value
      * for SVG element's "stroke-dasharray" attribute
