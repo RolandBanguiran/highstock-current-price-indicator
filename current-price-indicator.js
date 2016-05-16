@@ -247,7 +247,7 @@
                 .replace(/,$/, '')
                 .split(','); // ending comma
 
-            i = value.length;
+            var i = value.length;
             while (i--) {
                 value[i] = parseInt(value[i]) * width;
             }
