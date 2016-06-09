@@ -72,7 +72,8 @@
                 enabled: true,
                 style: {
                     color: '#ffffff',
-                    fontSize: '11px'
+                    fontSize: '11px',
+					fontFamily: ''
                 },
                 x: 0,
                 y: 0,
@@ -132,7 +133,8 @@
                 label = renderer.text(currentPriceTxt, 0, y)
                     .css({
                         color: options.style.color,
-                        fontSize: options.style.fontSize
+                        fontSize: options.style.fontSize,
+						fontFamily: options.style.fontFamily
                     }).add(group);
 
                 var labelBBox = label.getBBox();
