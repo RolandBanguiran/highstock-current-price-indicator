@@ -1,0 +1,15 @@
+{
+  "name": "current-price-indicator",
+  "version": "1.0.5",
+  "description": "Highstock Current Price Indicator =================================",
+  "main": "current-price-indicator.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "/home/jonie/.npm/_git-remotes/git-github-com-dafanasiev-highstock-current-price-indicator-git-master-c6405c91"
+  },
+  "author": "",
+  "license": "ISC"
+}
