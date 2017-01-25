@@ -1,6 +1,6 @@
 {
   "name": "current-price-indicator",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Highstock Current Price Indicator =================================",
   "main": "current-price-indicator.js",
   "scripts": {
