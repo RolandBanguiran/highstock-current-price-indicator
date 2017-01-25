@@ -150,17 +150,23 @@
                 });
 
                 // box
-                box = renderer.rect(x, y - (height / 2), width, height)
+                box = renderer.path([  'M', x-6, y, 
+									   'L', x, y- (height / 2), 
+									   'L', x+width+4, y- (height / 2), 
+									   'L', x+width+4, y+ (height / 2), 
+									   'L', x, y+ (height / 2), 
+									   'Z'
+									   ])
                     .attr({
-                        fill: options.backgroundColor,
                         stroke: options.borderColor,
-                        zIndex: 1,
-                        'stroke-width': 1
+						'stroke-width': 1,
+                        opacity: options.lineOpacity,
+                        zIndex: 1
                     })
                     .add(group);
 
                 // box
-                line = renderer.path(['M', lineFrom, y, 'L', x, y])
+                line = renderer.path(['M', lineFrom, y, 'L', x-6, y])
                     .attr({
                         stroke: options.lineColor,
                         'stroke-dasharray': dashStyleToArray(options.lineDashStyle, 1),
