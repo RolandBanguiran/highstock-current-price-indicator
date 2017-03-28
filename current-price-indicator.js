@@ -151,8 +151,8 @@
 
                 // box
                 box = renderer.path([  'M', x-6, y, 
-									   'L', x, y- (height / 2), 
-									   'L', x+width+4, y- (height / 2), 
+									   'L', x, y- (height / 2) - 2, 
+									   'L', x+width+4, y- (height / 2) - 2, 
 									   'L', x+width+4, y+ (height / 2), 
 									   'L', x, y+ (height / 2), 
 									   'Z'
@@ -161,6 +161,7 @@
                         stroke: options.borderColor,
 						'stroke-width': 1,
                         opacity: options.lineOpacity,
+                        fill: options.backgroundColor,
                         zIndex: 1
                     })
                     .add(group);
