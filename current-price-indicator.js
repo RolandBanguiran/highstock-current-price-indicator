@@ -189,7 +189,7 @@
                 var labelBBox = currentPriceIndicator.label.getBBox();
                 var width = labelBBox.width;
                 var height = labelBBox.height;
-                var x = priceYAxis.opposite ? chartWidth - width : marginLeft;
+                var x = priceYAxis.opposite ? chartWidth - priceYAxis.right : marginLeft;
                 x += options.x;
 
                 currentPriceIndicator.label.animate({
@@ -199,12 +199,17 @@
                 }, 0);
 
                 currentPriceIndicator.box.animate({
-                    y: y - (height / 2),
-                    x: x
+                    d: [  	'M', x-6, y, 
+							'L', x, y- (height / 2) - 2, 
+							'L', x+width+4, y- (height / 2) - 2, 
+							'L', x+width+4, y+ (height / 2), 
+							'L', x, y+ (height / 2), 
+							'Z'
+						]
                 }, 0);
 
                 currentPriceIndicator.line.animate({
-                    d: ['M', lineFrom, y, 'L', x, y]
+                    d: ['M', lineFrom, y, 'L', x-6, y]
                 }, 0);
 
                 // adjust
