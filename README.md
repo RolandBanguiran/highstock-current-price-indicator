@@ -1,10 +1,8 @@
-Highstock Current Price Indicator
-=================================
-
+# Highstock Current Price Indicator
 Using this plugin will display current price indicator in Highstock.
 
-Default Options:
-<pre>
+## Default Options:
+```javascript
 yAxis: {
   currentPriceIndicator: {
     backgroundColor: '#000000',
@@ -22,10 +20,6 @@ yAxis: {
     zIndex: 7
   }
 }
-</pre>
-
-Demo: http://www.highcharts.com/plugin-registry/single/28/Current%20Price%20Indicator
-
-Donate
----
-Bitcoin to <code>15dv1MW6LrArfzrzq46mPscjce7vLUfaBR</code>
+```
+## Demo
+http://www.highcharts.com/plugin-registry/single/28/Current%20Price%20Indicator
