@@ -22,4 +22,4 @@ yAxis: {
 }
 ```
 ## Demo
-http://www.highcharts.com/plugin-registry/single/28/Current%20Price%20Indicator
+https://www.highcharts.com/products/plugin-registry/single/28/Current%20Price%20Indicator
