@@ -138,17 +138,20 @@
 
                 // adjust
                 label.animate({
+                    x: priceYAxis.opposite ? chartWidth - width : marginLeft,
                     y: y + (height / 4)
                 }, 0);
             } else {
                 currentPriceIndicator.label.animate({
                     text: currentPrice,
+                    x: priceYAxis.opposite ? chartWidth - width : marginLeft,
                     y: y
                 }, 0);
 
                 height = currentPriceIndicator.label.getBBox().height;
 
                 currentPriceIndicator.box.animate({
+                    x:priceYAxis.opposite ? chartWidth - width : marginLeft,
                     y: y - (height / 2)
                 }, 0);
 
@@ -158,6 +161,7 @@
 
                 // adjust
                 currentPriceIndicator.label.animate({
+                    x:priceYAxis.opposite ? chartWidth - width : marginLeft,
                     y: y + (height / 4)
                 }, 0);
             }
@@ -177,7 +181,7 @@
             }
         }
     };
-    
+
     /**
      * Convert dash style name to array to be used a the value
      * for SVG element's "stroke-dasharray" attribute
