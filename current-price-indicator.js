@@ -45,7 +45,7 @@
                 backgroundColor: '#000000',
                 borderColor: '#000000',
                 lineColor: '#000000',
-                lineDashStyle: 'Solid',
+                lineDashStyle: 'shortdot',
                 lineOpacity: 0.8,
                 enabled: true,
                 style: {
@@ -209,7 +209,7 @@
                 .replace(/,$/, '')
                 .split(','); // ending comma
 
-            i = value.length;
+            let i = value.length;
             while (i--) {
                 value[i] = parseInt(value[i]) * width;
             }
